@@ -1,4 +1,9 @@
 # <font color=Blue size=10>前后端分离项目入门 v-1.0.0</font>
+v-1.0.0
+  * 用户登录、登出
+  * 密码加密
+  * 用户增删改查
+  * 前端页面
 * 1、<font color=Blue size=10>技术栈</font>
 
 | 前端                | 描述        |
