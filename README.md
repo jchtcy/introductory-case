@@ -1,4 +1,4 @@
-# <font color=Blue size=10>前后端分离项目入门 v-1.0.0</font>
+# <font color=Blue size=10>前后端分离项目入门</font>
 * 1、<font color=Blue size=10>技术栈</font>
 
 | 前端                | 描述        |
