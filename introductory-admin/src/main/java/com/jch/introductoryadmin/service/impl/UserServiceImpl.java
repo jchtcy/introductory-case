@@ -5,6 +5,7 @@ import com.jch.introductoryadmin.domain.Role;
 import com.jch.introductoryadmin.domain.User;
 import com.jch.introductoryadmin.dao.UserDao;
 import com.jch.introductoryadmin.service.IUserService;
+import com.jch.introductorycommom.utils.JwtUtil;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements IUserService{
     @Autowired
     private UserDao userDao;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private JwtUtil jwtUtil;
     /**
      * 通过ID查询单条数据
      *
@@ -108,9 +109,13 @@ public class UserServiceImpl implements IUserService{
      */
     @Override
     public Map<String, Object> getUserinfo(String token) {
-        Object obj = redisTemplate.opsForValue().get(token);
-        if (obj != null) {
-            User loginUser = JSON.parseObject(JSON.toJSONString(obj), User.class);
+        User loginUser = null;
+        try {
+            loginUser = jwtUtil.parseToken(token, User.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (loginUser != null) {
             Map<String, Object> data = new HashMap<>();
             data.put("username", loginUser.getUsername());
             data.put("avatar", loginUser.getAvatar());

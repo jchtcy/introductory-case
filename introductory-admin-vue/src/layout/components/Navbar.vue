@@ -16,7 +16,7 @@
               个人信息
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+          <a target="_blank" href="https://github.com/jchtcy/introductory-case">
             <el-dropdown-item>项目地址</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
@@ -50,7 +50,10 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('auth/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      await this.$store.dispatch("tagsView/delAllViews")
+      sessionStorage.removeItem("tabViews")
+      this.$router.push(`/login`)
+      //this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }

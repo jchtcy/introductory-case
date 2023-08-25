@@ -16,15 +16,15 @@ public class ResultUtil<T> {
     private T data;
 
     public static <T> ResultUtil<T> ok() {
-        return new ResultUtil<>(success, null, null);
+        return new ResultUtil<>(success, "success", null);
     }
 
     public static <T> ResultUtil<T> ok(T data) {
-        return new ResultUtil<>(success, null, data);
+        return new ResultUtil<>(success, "success", data);
     }
 
     public static <T> ResultUtil<T> fail(String message) {
-        return new ResultUtil<>(success, message, null);
+        return new ResultUtil<>(error, message, null);
     }
 
     public static <T> ResultUtil<T> fail(String code, String message) {

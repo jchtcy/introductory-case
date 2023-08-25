@@ -4,6 +4,7 @@ import com.jch.introductoryadmin.domain.User;
 import com.jch.introductoryadmin.service.IAuthService;
 import com.jch.introductoryadmin.service.IUserService;
 import com.jch.introductoryadmin.dto.LoginBody;
+import com.jch.introductorycommom.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,9 +20,9 @@ public class AuthServiceImpl implements IAuthService{
     @Autowired
     private IUserService userService;
     @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtUtil jwtUtil;
     /**
      * 登录
      * @param loginBody
@@ -34,11 +35,11 @@ public class AuthServiceImpl implements IAuthService{
         Map<String, Object> data = new HashMap<>();
         User loginUser = userService.selectByUsername(username);
         if (loginUser != null && passwordEncoder.matches(password, loginUser.getPassword())) {
-            //todo 暂时用UUID
-            String token = "user:" + UUID.randomUUID();
-            //存入redis
             loginUser.setPassword(null);
-            redisTemplate.opsForValue().set(token, loginUser,30, TimeUnit.MINUTES);
+            //生成token
+            String token = jwtUtil.createToken(loginUser);
+            //存入redis
+            //redisTemplate.opsForValue().set(token, loginUser,30, TimeUnit.MINUTES);
             //返回数据
             data.put("token", token);
         }
@@ -52,7 +53,7 @@ public class AuthServiceImpl implements IAuthService{
      */
     @Override
     public void logout(String token) {
-        redisTemplate.delete(token);
+
     }
 
 

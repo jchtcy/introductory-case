@@ -4,12 +4,15 @@ import com.alibaba.fastjson2.JSONObject;
 import com.jch.introductoryadmin.service.IAuthService;
 import com.jch.introductoryadmin.dto.LoginBody;
 import com.jch.introductorycommom.utils.ResultUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Api(tags = {"登录接口"})
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -21,6 +24,7 @@ public class AuthController {
      * @param loginBody
      * @return
      */
+    @ApiOperation("用户登录")
     @PostMapping("/login")
     public ResultUtil<Map<String, Object>> login(@RequestBody LoginBody loginBody){
 

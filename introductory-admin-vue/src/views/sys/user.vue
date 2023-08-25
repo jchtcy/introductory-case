@@ -34,8 +34,7 @@
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" @click="editUser(scope.row)" size="mini" circle></el-button>
-            <el-button type="danger" icon="el-icon-delete" @click="deleteUser(scope.row.id)" size="mini"
-              circle></el-button>
+            <el-button type="danger" icon="el-icon-delete" @click="deleteUser(scope.row)" size="mini" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,6 +72,7 @@
 
 <script>
 import { getUserList, addUser, updataUser, deleteById } from '@/api/user'
+import { resetRouter } from '@/router';
 
 export default {
   data() {
@@ -119,9 +119,9 @@ export default {
 
     },
     getUserList() {
-      // console.log(this.searchModel)
       getUserList(this.searchModel)
         .then(response => {
+          // console.log(response)
           var data = response.data;
           this.userList = data.content;
           this.total = data.totalElements;
@@ -180,20 +180,31 @@ export default {
         }
       });
     },
-    deleteUser(id) {
-      deleteById(id)
-        .then(response => {
-          this.$message({
-            message: "删除用户成功",
-            type: 'success'
+    deleteUser(row) {
+      this.$confirm('确认删除用户 ${row.username} ?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warninng'
+      }).then(() => {
+        deleteById(id)
+          .then(response => {
+            this.$message({
+              message: "删除用户成功",
+              type: 'success'
+            });
+            this.getUserList();
+          })
+          .catch({
+            message: "删除用户失败",
+            type: 'error'
           });
-          this.getUserList();
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         })
-        .catch({
-          message: "删除用户失败",
-          type: 'error'
-        });
-    }
+      });
+    },
   },
   created() {
     this.getUserList();
