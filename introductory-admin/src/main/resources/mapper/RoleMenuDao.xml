@@ -97,5 +97,25 @@
         delete from x_role_menu where id = #{id}
     </delete>
 
+
+    <!-- 返回角色拥有的菜单 -->
+    <select id="getMenuIdListByRoleId" parameterType="Integer" resultType="Integer" >
+        select rm.menu_id from x_role_menu rm, x_menu m
+        where rm.menu_id = m.menu_id AND m.is_leaf = 'Y' AND rm.role_id = #{roleId}
+    </select>
+
+    <!-- 通过角色id列表删除数据 -->
+    <delete id="deleteByroleId">
+        delete from x_role_menu where role_id = #{roleId}
+    </delete>
+
+    <!-- 批量插入角色权限 -->
+    <insert id="insertBatchMenuIdList">
+        insert into x_role_menu(role_id, menu_id)
+        values
+        <foreach collection="menuIdList" item="menuId" separator=",">
+            (#{roleId}, #{menuId})
+        </foreach>
+    </insert>
 </mapper>
 

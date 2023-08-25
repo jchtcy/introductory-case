@@ -44,7 +44,7 @@ public class RoleController {
      */
     @GetMapping("/{id}")
     public ResultUtil<Role> queryById(@PathVariable("id") Integer id) {
-        return ResultUtil.ok(this.roleService.queryById(id));
+        return ResultUtil.ok(this.roleService.getRoleById(id));
     }
 
     /**
@@ -54,8 +54,8 @@ public class RoleController {
      * @return 新增结果
      */
     @PostMapping("add")
-    public ResultUtil<Role> add(@RequestBody Role role) {
-        return ResultUtil.ok(this.roleService.insert(role));
+    public ResultUtil<Integer> add(@RequestBody Role role) {
+        return ResultUtil.ok(this.roleService.addRole(role));
     }
 
     /**
@@ -65,7 +65,7 @@ public class RoleController {
      * @return 编辑结果
      */
     @PutMapping("/edit")
-    public ResultUtil<Role> edit(@RequestBody Role role) {
+    public ResultUtil<Integer> edit(@RequestBody Role role) {
         return ResultUtil.ok(this.roleService.update(role));
     }
 
@@ -79,6 +79,5 @@ public class RoleController {
     public ResultUtil<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResultUtil.ok(this.roleService.deleteById(id));
     }
-
 }
 

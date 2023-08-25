@@ -4,11 +4,9 @@ import com.jch.introductoryadmin.domain.Menu;
 import com.jch.introductoryadmin.dao.MenuDao;
 import com.jch.introductoryadmin.service.IMenuService;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * (Menu)表服务实现类
@@ -33,18 +31,15 @@ public class MenuServiceImpl implements IMenuService {
     }
     
     /**
-     * 分页查询
+     * 查询
      *
      * @param menu 筛选条件
-     * @param pageNo 起始页
-     * @param pageSize 每页大小
      * @return 查询结果
      */
     @Override
-    public Page<Menu> queryByPage(Menu menu, int pageNo, int pageSize) {
-        long total = this.menuDao.count(menu);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        return new PageImpl<>(this.menuDao.queryAllByLimit(menu, pageable), pageable, total);
+    public List<Menu> queryList(Menu menu) {
+
+        return this.menuDao.queryList(menu);
     }
 
     /**
@@ -80,5 +75,32 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     public boolean deleteById(Integer menuId) {
         return this.menuDao.deleteById(menuId) > 0;
+    }
+
+    /**
+     * 查询所有菜单
+     *
+     * @return 查询结果
+     */
+    @Override
+    public List<Menu> getAllMenu() {
+        Menu father = new Menu();
+        father.setParentId(0);
+        List<Menu> fatherList = this.menuDao.queryList(father);
+        setMenuChildren(fatherList);
+        return fatherList;
+    }
+
+    private void setMenuChildren(List<Menu> fatherList) {
+        if (fatherList != null ) {
+            for (Menu menu : fatherList) {
+                Menu son = new Menu();
+                son.setParentId(menu.getMenuId());
+                List<Menu> sonList = this.menuDao.queryList(son);
+                menu.setChildren(sonList);
+                //递归
+                setMenuChildren(sonList);
+            }
+        }
     }
 }

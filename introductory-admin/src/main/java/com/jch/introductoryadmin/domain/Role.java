@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * (Role)实体类
@@ -23,6 +24,6 @@ public class Role implements Serializable {
     
     private String roleDesc;
 
-
+    private List<Integer> menuIdList;
 }
 

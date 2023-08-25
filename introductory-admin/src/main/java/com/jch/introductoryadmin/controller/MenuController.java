@@ -3,10 +3,13 @@ package com.jch.introductoryadmin.controller;
 import com.jch.introductoryadmin.domain.Menu;
 import com.jch.introductoryadmin.service.IMenuService;
 import com.jch.introductorycommom.utils.ResultUtil;
-import org.springframework.data.domain.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * (Menu)表控制层
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author 吉晨浩
  * @since 2023-08-23 10:36:17
  */
+@Api(tags = {"菜单接口"})
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
@@ -24,16 +28,14 @@ public class MenuController {
     private IMenuService menuService;
     
    /**
-     * 分页查询
+     * 查询
      *
      * @param menu 筛选条件
-     * @param pageNo 起始页
-     * @param pageSize 每页大小              
      * @return 查询结果
      */
     @GetMapping("/list")
-    public ResultUtil<Page<Menu>> queryByPage(Menu menu, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        return ResultUtil.ok(this.menuService.queryByPage(menu, pageNo, pageSize));
+    public ResultUtil<List<Menu>> queryList(Menu menu) {
+        return ResultUtil.ok(this.menuService.queryList(menu));
     }
 
     /**
@@ -78,6 +80,18 @@ public class MenuController {
     @DeleteMapping("/deleteById/{id}")
     public ResultUtil<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResultUtil.ok(this.menuService.deleteById(id));
+    }
+
+    /**
+     * 查询所有菜单
+     *
+     * @return 查询结果
+     */
+    @ApiOperation("获得所欲菜单")
+    @GetMapping("/all")
+    public ResultUtil<List<Menu>> getAllMenu() {
+        List<Menu> menuList = this.menuService.getAllMenu();
+        return ResultUtil.ok(menuList);
     }
 
 }

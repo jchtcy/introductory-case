@@ -79,6 +79,5 @@ public interface RoleDao {
      * @return 影响行数
      */
     int deleteById(Integer roleId);
-
 }
 

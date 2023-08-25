@@ -25,43 +25,40 @@
     </select>
 
     <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="MenuMap">
+    <select id="queryList" resultMap="MenuMap">
         <include refid="selectSQL"/>
         <where>
-         <if test="menu != null">
-            <if test="menu.menuId != null">
-                and menu_id = #{menu.menuId}
+            <if test="menuId != null">
+                and menu_id = #{menuId}
             </if>
-            <if test="menu.component != null and menu.component != ''">
-                and component = #{menu.component}
+            <if test="component != null and component != ''">
+                and component = #{component}
             </if>
-            <if test="menu.path != null and menu.path != ''">
-                and path = #{menu.path}
+            <if test="path != null and path != ''">
+                and path = #{path}
             </if>
-            <if test="menu.redirect != null and menu.redirect != ''">
-                and redirect = #{menu.redirect}
+            <if test="redirect != null and redirect != ''">
+                and redirect = #{redirect}
             </if>
-            <if test="menu.name != null and menu.name != ''">
-                and name = #{menu.name}
+            <if test="name != null and name != ''">
+                and name = #{name}
             </if>
-            <if test="menu.title != null and menu.title != ''">
-                and title = #{menu.title}
+            <if test="title != null and title != ''">
+                and title = #{title}
             </if>
-            <if test="menu.icon != null and menu.icon != ''">
-                and icon = #{menu.icon}
+            <if test="icon != null and icon != ''">
+                and icon = #{icon}
             </if>
-            <if test="menu.parentId != null">
-                and parent_id = #{menu.parentId}
+            <if test="parentId != null">
+                and parent_id = #{parentId}
             </if>
-            <if test="menu.isLeaf != null and menu.isLeaf != ''">
-                and is_leaf = #{menu.isLeaf}
+            <if test="isLeaf != null and isLeaf != ''">
+                and is_leaf = #{isLeaf}
             </if>
-            <if test="menu.hidden != null">
-                and hidden = #{menu.hidden}
+            <if test="hidden != null">
+                and hidden = #{hidden}
             </if>
-         </if>
         </where>
-        limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
     <!--统计总行数-->

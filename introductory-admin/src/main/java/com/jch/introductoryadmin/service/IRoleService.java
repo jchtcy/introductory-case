@@ -44,7 +44,7 @@ public interface IRoleService {
      * @param role 实例对象
      * @return 实例对象
      */
-    Role update(Role role);
+    Integer update(Role role);
 
     /**
      * 通过主键删除数据
@@ -53,5 +53,18 @@ public interface IRoleService {
      * @return 是否成功
      */
     boolean deleteById(Integer roleId);
-
+    /**
+     * 新增数据
+     *
+     * @param role 实体
+     * @return 新增结果
+     */
+    Integer addRole(Role role);
+    /**
+     * 通过主键查询单条数据
+     *
+     * @param id 主键
+     * @return 单条数据
+     */
+    Role getRoleById(Integer id);
 }

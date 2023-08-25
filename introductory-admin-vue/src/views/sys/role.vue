@@ -23,8 +23,7 @@
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" @click="editRole(scope.row)" size="mini" circle></el-button>
-            <el-button type="danger" icon="el-icon-delete" @click="deleteRole(scope.row)" size="mini"
-              circle></el-button>
+            <el-button type="danger" icon="el-icon-delete" @click="deleteRole(scope.row)" size="mini" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -41,6 +40,10 @@
         <el-form-item label="角色描述" prop="roleDesc">
           <el-input v-model="roleForm.roleDesc" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="权限设置" prop="menuIdList">
+          <el-tree ref="menuRef" :data="menuList" node-key="menuId" show-checkbox :props="menuProps" default-expand-all >
+          </el-tree>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -52,10 +55,15 @@
 
 <script>
 import { getRoleList, addRole, updataRole, deleteById } from '@/api/role'
-
+import { getMenuList,  } from '@/api/menu'
 export default {
   data() {
     return {
+      menuList: [],
+      menuProps: {
+        children: 'children',
+        label: 'title',
+      },
       total: 0,
       searchModel: {
         roleName: null,
@@ -103,15 +111,25 @@ export default {
     editRole(row) {
       this.roleForm = row;
       this.title = '修改角色';
+      this.$nextTick(() => {
+        this.$refs.menuRef.setCheckedKeys(row.menuIdList);
+      })
       this.dialogFormVisible = true;
     },
     clearForm() {
       this.roleForm = {};
       this.$refs.roleFormRef.clearValidate();
+      this.$refs.menuRef.setCheckedNodes([]);
     },
     submitForm() {
       this.$refs.roleFormRef.validate((valid) => {
         if (valid) {
+          let CheckedKeys = this.$refs.menuRef.getCheckedKeys();
+          let halfCheckedKeys = this.$refs.menuRef.getHalfCheckedKeys();
+          // console.log(CheckedKeys);
+          // console.log(halfCheckedKeys);
+          this.roleForm.menuIdList = CheckedKeys.concat(halfCheckedKeys);
+          // console.log(this.roleForm)
           if (this.title == '新增角色') {
             addRole(this.roleForm)
               .then(response => {
@@ -148,23 +166,23 @@ export default {
       });
     },
     deleteRole(row) {
-      this.$confirm('确认删除角色 ${row.Name} ?', '提示',{
+      this.$confirm(`确认删除角色 ${row.roleName} ?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warninng'
       }).then(() => {
         deleteById(row.roleId)
-        .then(response => {
-          this.$message({
-            message: "删除角色成功",
-            type: 'success'
+          .then(response => {
+            this.$message({
+              message: "删除角色成功",
+              type: 'success'
+            });
+            this.getRoleList();
+          })
+          .catch({
+            message: "删除角色失败",
+            type: 'error'
           });
-          this.getRoleList();
-        })
-        .catch({
-          message: "删除角色失败",
-          type: 'error'
-        });
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -172,10 +190,16 @@ export default {
         })
       });
 
-    }
+    },
+    getMenuList(){
+      getMenuList().then(response => {
+        this.menuList = response.data;
+      })
+    },
   },
   created() {
     this.getRoleList();
+    this.getMenuList();
   }
 }
 </script>

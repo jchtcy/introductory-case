@@ -37,7 +37,7 @@ public class UserController {
      * @return 查询结果
      */
     @GetMapping("/list")
-    public ResultUtil<Page<User>> queryByPage(User user,@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
+    public ResultUtil<Page<User>> queryByPage(User user, int pageNo, int pageSize) {
         return ResultUtil.ok(this.userService.queryByPage(user, pageNo, pageSize));
     }
 

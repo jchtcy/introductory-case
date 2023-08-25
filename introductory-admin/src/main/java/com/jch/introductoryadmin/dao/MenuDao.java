@@ -26,10 +26,9 @@ public interface MenuDao {
      * 查询指定行数据
      *
      * @param menu 查询条件
-     * @param pageable         分页对象
      * @return 对象列表
      */
-    List<Menu> queryAllByLimit(Menu menu, @Param("pageable") Pageable pageable);
+    List<Menu> queryList(Menu menu);
 
     /**
      * 统计总行数

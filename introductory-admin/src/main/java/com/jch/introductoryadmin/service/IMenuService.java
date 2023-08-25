@@ -1,8 +1,8 @@
 package com.jch.introductoryadmin.service;
 
 import com.jch.introductoryadmin.domain.Menu;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+
+import java.util.List;
 
 /**
  * (Menu)表服务接口
@@ -21,14 +21,12 @@ public interface IMenuService {
     Menu queryById(Integer menuId);
     
    /**
-     * 分页查询
+     * 查询
      *
      * @param menu 筛选条件
-     * @param pageNo 起始页
-     * @param pageSize 每页大小              
      * @return 查询结果
      */
-    Page<Menu> queryByPage(Menu menu, int pageNo, int pageSize);
+    List<Menu> queryList(Menu menu);
 
     /**
      * 新增数据
@@ -54,4 +52,10 @@ public interface IMenuService {
      */
     boolean deleteById(Integer menuId);
 
+    /**
+     * 查询所有菜单
+     *
+     * @return 查询结果
+     */
+    List<Menu> getAllMenu();
 }

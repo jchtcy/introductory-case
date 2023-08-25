@@ -1,6 +1,7 @@
 package com.jch.introductoryadmin.dao;
 
 import com.jch.introductoryadmin.domain.RoleMenu;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.domain.Pageable;
@@ -80,5 +81,26 @@ public interface RoleMenuDao {
      */
     int deleteById(Integer id);
 
+    /**
+     * 返回角色拥有的菜单
+     * @param roleId 角色id
+     * @return
+     */
+    List<Integer> getMenuIdListByRoleId(Integer roleId);
+
+    /**
+     * 通过角色id删除数据
+     *
+     * @param roleId 角色id
+     * @return 影响行数
+     */
+    int deleteByroleId(Integer roleId);
+
+    /**
+     * 批量插入角色权限
+     * @param roleId
+     * @param menuIdList
+     */
+    int insertBatchMenuIdList(Integer roleId, List<Integer> menuIdList);
 }
 
