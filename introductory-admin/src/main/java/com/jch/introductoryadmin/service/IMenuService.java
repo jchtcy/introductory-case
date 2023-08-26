@@ -1,6 +1,7 @@
 package com.jch.introductoryadmin.service;
 
 import com.jch.introductoryadmin.domain.Menu;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -58,4 +59,11 @@ public interface IMenuService {
      * @return 查询结果
      */
     List<Menu> getAllMenu();
+
+    /**
+     * 根据用户id查询菜单权限
+     * @param userId
+     * @return
+     */
+    List<Menu> getListByUserId(Integer userId);
 }

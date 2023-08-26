@@ -103,4 +103,28 @@ public class MenuServiceImpl implements IMenuService {
             }
         }
     }
+
+    /**
+     * 根据用户id查询菜单权限
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Menu> getListByUserId(Integer userId) {
+        //父菜单
+        List<Menu> menuList = this.menuDao.getListByUserId(userId, 0);
+        //子菜单
+        setMenuChildrenByUserId(userId, menuList);
+        return menuList;
+    }
+
+    private void setMenuChildrenByUserId(Integer userId, List<Menu> menuList) {
+        if (menuList != null) {
+            for (Menu menu : menuList) {
+                List<Menu> subMenuList = this.menuDao.getListByUserId(userId, menu.getMenuId());
+                menu.setChildren(subMenuList);
+                setMenuChildrenByUserId(userId, subMenuList);
+            }
+        }
+    }
 }

@@ -79,5 +79,12 @@ public interface MenuDao {
      */
     int deleteById(Integer menuId);
 
+    /**
+     * 根据用户id查询菜单权限
+     * @param userId
+     * @param pid
+     * @return
+     */
+    List<Menu> getListByUserId(Integer userId, Integer pid);
 }
 

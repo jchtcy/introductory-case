@@ -171,5 +171,14 @@
         delete from x_menu where menu_id = #{menuId}
     </delete>
 
+    <select id="getListByUserId" resultMap="MenuMap">
+        select
+            m.menu_id, m.component, m.path, m.redirect, m.name, m.title, m.icon, m.parent_id, m.is_leaf, m.hidden
+        from x_menu m, x_role_menu rm, x_user_role ur
+        where m.menu_id = rm.menu_id
+            and rm.role_id = ur.role_id
+            and ur.user_id = #{userId}
+            and m.parent_id = #{pid}
+    </select>
 </mapper>
 

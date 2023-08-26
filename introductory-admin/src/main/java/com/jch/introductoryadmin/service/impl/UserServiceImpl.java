@@ -1,11 +1,14 @@
 package com.jch.introductoryadmin.service.impl;
 
 import com.alibaba.fastjson2.JSON;
+import com.jch.introductoryadmin.dao.MenuDao;
 import com.jch.introductoryadmin.dao.UserRoleDao;
+import com.jch.introductoryadmin.domain.Menu;
 import com.jch.introductoryadmin.domain.Role;
 import com.jch.introductoryadmin.domain.User;
 import com.jch.introductoryadmin.dao.UserDao;
 import com.jch.introductoryadmin.domain.UserRole;
+import com.jch.introductoryadmin.service.IMenuService;
 import com.jch.introductoryadmin.service.IUserService;
 import com.jch.introductorycommom.utils.JwtUtil;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +38,8 @@ public class UserServiceImpl implements IUserService{
     private JwtUtil jwtUtil;
     @Autowired
     private UserRoleDao userRoleDao;
+    @Autowired
+    private IMenuService menuService;
     /**
      * 通过ID查询单条数据
      *
@@ -137,7 +142,8 @@ public class UserServiceImpl implements IUserService{
             List<Role> userRole = userDao.getUserRole(loginUser.getId());
             List<String> descList = userRole.stream().map(Role::getRoleDesc).collect(Collectors.toList());
             data.put("roles", descList);
-
+            List<Menu> menuList = menuService.getListByUserId(loginUser.getId());
+            data.put("menuList", menuList);
             return data;
         }
         return null;
