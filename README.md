@@ -1,4 +1,4 @@
-# <font color=Blue size=10>前后端分离项目入门 v-1.0.0</font>
+# <font color=Blue size=10>前后端分离项目入门 v-2.0.0</font>
 v-2.0.0
   * 前端页面
   * 用户登录、登出
