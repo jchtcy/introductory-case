@@ -53,9 +53,7 @@
                 <if test="user.avatar != null and user.avatar != ''">
                     and avatar = #{user.avatar}
                 </if>
-                <if test="user.deleted != null">
-                    and deleted = #{user.deleted}
-                </if>
+                and deleted = 0
             </if>
         </where>
         limit #{pageable.offset}, #{pageable.pageSize}
@@ -87,9 +85,7 @@
             <if test="avatar != null and avatar != ''">
                 and avatar = #{avatar}
             </if>
-            <if test="deleted != null">
-                and deleted = #{deleted}
-            </if>
+            and deleted = 0
         </where>
     </select>
 
@@ -153,9 +149,9 @@
     </update>
 
     <!--通过主键删除-->
-    <delete id="deleteById">
-        delete from x_user where id = #{id}
-    </delete>
+    <update id="deleteById">
+        update x_user set deleted = 1 where id = #{id}
+    </update>
 
     <!--通过用户名查找-->
     <select id="selectByUsername" resultMap="UserMap">

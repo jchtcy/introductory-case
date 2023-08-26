@@ -125,4 +125,13 @@ public class RoleServiceImpl implements IRoleService {
         role.setMenuIdList(menuIdList);
         return role;
     }
+
+    /**
+     *
+     * @return 返回所有角色
+     */
+    @Override
+    public List<Role> getAllRole() {
+        return this.roleDao.getAllRole();
+    }
 }

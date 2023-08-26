@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * (Role)表控制层
  *
@@ -78,6 +80,15 @@ public class RoleController {
     @DeleteMapping("/deleteById/{id}")
     public ResultUtil<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResultUtil.ok(this.roleService.deleteById(id));
+    }
+
+    /**
+     *
+     * @return 返回所有角色
+     */
+    @GetMapping("/all")
+    public ResultUtil<List<Role>> getAllRole(){
+        return ResultUtil.ok(this.roleService.getAllRole());
     }
 }
 

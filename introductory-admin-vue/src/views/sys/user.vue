@@ -58,6 +58,12 @@
           <el-switch v-model="userForm.status" :active-value="1" :inactive-value="0">
           </el-switch>
         </el-form-item>
+        <el-form-item label="用户角色" prop="status">
+          <el-checkbox-group v-model="userForm.roleIdList" :min="1" :max="2">
+            <el-checkbox v-for="role in roleList" :label="role.roleId" :key="role.roleId">
+            {{ role.roleDesc}}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
         <el-form-item label="邮件" prop="email">
           <el-input v-model="userForm.email" autocomplete="off"></el-input>
         </el-form-item>
@@ -72,7 +78,7 @@
 
 <script>
 import { getUserList, addUser, updataUser, deleteById } from '@/api/user'
-import { resetRouter } from '@/router';
+import { getAllRole } from '@/api/role'
 
 export default {
   data() {
@@ -84,6 +90,7 @@ export default {
       callback();
     };
     return {
+      roleList: [],
       total: 0,
       searchModel: {
         username: null,
@@ -94,7 +101,9 @@ export default {
       userList: [],
       title: "",
       dialogFormVisible: false,
-      userForm: {},
+      userForm: {
+        roleIdList: [],
+      },
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -129,6 +138,12 @@ export default {
           // console.log(this.total);
         });
     },
+    getAllRole() {
+      getAllRole().then(responnse => {
+        this.roleList = responnse.data;
+        // console.log(this.roleList);
+      })
+    },
     addUser() {
       this.title = '新增用户';
       this.dialogFormVisible = true;
@@ -139,13 +154,16 @@ export default {
       this.dialogFormVisible = true;
     },
     clearForm() {
-      this.userForm = {};
+      this.userForm = {
+        roleIdList : [],
+      };
       this.$refs.userFormRef.clearValidate();
     },
     submitForm() {
       this.$refs.userFormRef.validate((valid) => {
         if (valid) {
           if (this.title == '新增用户') {
+            // console.log(this.userForm)
             addUser(this.userForm)
               .then(response => {
                 this.$message({
@@ -181,12 +199,12 @@ export default {
       });
     },
     deleteUser(row) {
-      this.$confirm('确认删除用户 ${row.username} ?', '提示', {
+      this.$confirm(`确认删除用户 ${row.username} ?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warninng'
       }).then(() => {
-        deleteById(id)
+        deleteById(row.id)
           .then(response => {
             this.$message({
               message: "删除用户成功",
@@ -208,6 +226,7 @@ export default {
   },
   created() {
     this.getUserList();
+    this.getAllRole();
   }
 }
 </script>

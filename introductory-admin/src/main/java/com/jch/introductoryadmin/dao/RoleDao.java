@@ -79,5 +79,10 @@ public interface RoleDao {
      * @return 影响行数
      */
     int deleteById(Integer roleId);
+    /**
+     *
+     * @return 返回所有角色
+     */
+    List<Role> getAllRole();
 }
 

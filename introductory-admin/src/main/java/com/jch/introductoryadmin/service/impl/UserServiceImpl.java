@@ -1,9 +1,11 @@
 package com.jch.introductoryadmin.service.impl;
 
 import com.alibaba.fastjson2.JSON;
+import com.jch.introductoryadmin.dao.UserRoleDao;
 import com.jch.introductoryadmin.domain.Role;
 import com.jch.introductoryadmin.domain.User;
 import com.jch.introductoryadmin.dao.UserDao;
+import com.jch.introductoryadmin.domain.UserRole;
 import com.jch.introductoryadmin.service.IUserService;
 import com.jch.introductorycommom.utils.JwtUtil;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,8 @@ public class UserServiceImpl implements IUserService{
     private UserDao userDao;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private UserRoleDao userRoleDao;
     /**
      * 通过ID查询单条数据
      *
@@ -54,7 +58,14 @@ public class UserServiceImpl implements IUserService{
     public Page<User> queryByPage(User user, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         long total = this.userDao.count(user);
-        return new PageImpl<>(this.userDao.queryAllByLimit(user, pageable), pageable, total);
+        List<User> userList = this.userDao.queryAllByLimit(user, pageable);
+        if (userList != null) {
+            for (User u : userList) {
+                List<Integer> roleList = this.userRoleDao.getUserRoles(u.getId());
+                u.setRoleIdList(roleList);
+            }
+        }
+        return new PageImpl<>(userList, pageable, total);
     }
 
     /**
@@ -65,7 +76,9 @@ public class UserServiceImpl implements IUserService{
      */
     @Override
     public User insert(User user) {
+        user.setDeleted(0);
         this.userDao.insert(user);
+        this.userRoleDao.insertBatchRole(user.getId(), user.getRoleIdList());
         return user;
     }
 
@@ -78,6 +91,8 @@ public class UserServiceImpl implements IUserService{
     @Override
     public User update(User user) {
         this.userDao.update(user);
+        this.userRoleDao.deleteByUserId(user.getId());
+        this.userRoleDao.insertBatchRole(user.getId(), user.getRoleIdList());
         return this.queryById(user.getId());
     }
 
@@ -89,7 +104,7 @@ public class UserServiceImpl implements IUserService{
      */
     @Override
     public boolean deleteById(Integer id) {
-        return this.userDao.deleteById(id) > 0;
+        return this.userDao.deleteById(id) > 0 && this.userRoleDao.deleteByUserId(id) > 0;
     }
 
     /**

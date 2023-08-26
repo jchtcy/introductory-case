@@ -4,6 +4,8 @@ import com.jch.introductoryadmin.domain.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 /**
  * (Role)表服务接口
  *
@@ -67,4 +69,10 @@ public interface IRoleService {
      * @return 单条数据
      */
     Role getRoleById(Integer id);
+
+    /**
+     *
+     * @return 返回所有角色
+     */
+    List<Role> getAllRole();
 }

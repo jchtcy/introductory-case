@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * (User)实体类
@@ -33,6 +34,6 @@ public class User implements Serializable {
     
     private Integer deleted;
 
-
+    private List<Integer> roleIdList;
 }
 

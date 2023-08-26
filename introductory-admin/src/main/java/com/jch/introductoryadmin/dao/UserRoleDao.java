@@ -1,6 +1,7 @@
 package com.jch.introductoryadmin.dao;
 
 import com.jch.introductoryadmin.domain.UserRole;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.domain.Pageable;
@@ -80,6 +81,25 @@ public interface UserRoleDao {
      */
     int deleteById(Integer id);
 
+    /**
+     * 批量增加用户权限
+     * @param userId
+     * @param roleIdList
+     */
+    void insertBatchRole(Integer userId, List<Integer> roleIdList);
 
+    /**
+     * 获取用户权限
+     * @param userId
+     * @return
+     */
+    List<Integer> getUserRoles(Integer userId);
+
+    /**
+     * 根据用户id删除权限
+     * @param userId
+     * @return
+     */
+    int deleteByUserId(Integer userId);
 }
 

@@ -97,5 +97,9 @@
         delete from x_role where role_id = #{roleId}
     </delete>
 
+    <!-- 返回所有角色 -->
+    <select id="getAllRole" resultMap="RoleMap">
+        <include refid="selectSQL"></include>
+    </select>
 </mapper>
 
